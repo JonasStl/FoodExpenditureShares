@@ -22,8 +22,8 @@ capture log close _all
 ********************************************************************************
 
 * Root folder of the replication package
-global workdir "/Users/jonasstehl/ownCloud/Healthy food poverty/FESUpdate2025/Replication Package" // insert your folder path
-global datadir "/Users/jonasstehl/ownCloud/Healthy food poverty/FESUpdate2025/Replication Package/data" // insert your folder path
+global workdir ".../Replication Package" // insert your folder path
+global datadir ".../Replication Package/data" // insert your folder path
 
 ********************************************************************************
 * 2. BASIC CHECKS
