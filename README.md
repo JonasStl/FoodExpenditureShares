@@ -13,11 +13,11 @@ FoodExpenditureShares/
 └── Replication Package/
     ├── do/
     │   ├── 0_master.do
-    │   ├── 4_analysis_crosssection.do
-    │   ├── 5_time.do
-    │   ├── 6_imputations.do
-    │   ├── 7_time_panel.do
-    │   └── 9_maps.do
+    │   ├── 1_crosssection.do
+    │   ├── 2_time.do
+    │   ├── 3_imputations.do
+    │   ├── 4_time_panel.do
+    │   └── 5_maps.do
     ├── data/
     │   ├── FESdatabase_quintiles.dta
     │   ├── FESdatabase_deciles.dta
@@ -31,9 +31,11 @@ FoodExpenditureShares/
     │   │   ├── PIP_UMICs.dta
     │   │   └── WDI.dta
     │   └── World Bank Official Boundaries - Admin 0
+    │   │   ├── _worldmap_shp.dta
+    │   │   ├── _worldmap.dta    
+    │   │   ├── WB_GAD_ADM0.shp
     ├── graphs/
     ├── tables/
-    └── logs/
 ```
 
 ## System requirements
@@ -107,7 +109,7 @@ Auxiliary data directory (`Replication Package/data/aux data/`):
 - `icp_data.dta`
 
 Generated during execution:
-- `FESdatabase_imputed.dta` is created by `6_imputations.do` and therefore does not need to be supplied initially if the full workflow is run from the beginning.
+- `FESdatabase_imputed.dta` is created by `3_imputations.do` and therefore does not need to be supplied initially if the full workflow is run from the beginning.
 
 ## Running the replication package
 
@@ -128,13 +130,6 @@ The intended execution order is:
 3. `3_imputations.do`
 4. `4_time_panel.do`
 5. `5_maps.do`
-
-### Important path note
-The child do-files currently contain hard-coded global path definitions at the top. For the master script to control paths consistently, those path globals should be commented out or removed in the child scripts. In `9_maps.do`, the hard-coded `cd` command for the boundary files should be replaced with:
-
-```stata
-cd "${shapedir}"
-```
 
 ## Replication
 
