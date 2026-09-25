@@ -1,6 +1,6 @@
 ********************************************************************************
 * Master do-file: replication package
-* Project: Food expenditure shares across consumption distributions worldwide
+* Project: Food expenditure shares across welfare distributions worldwide
 * Author: Jonas Stehl
 ********************************************************************************
 
@@ -10,88 +10,77 @@ macro drop _all
 set more off
 capture log close _all
 
-/* Data instructions
-	•	put main datasets in .../Replication Package/data/
-	•	put auxiliary inputs in .../Replication Package/data/aux data/
-	•	put shapefiles in .../Replication Package/data/aux data/World Bank Official Boundaries - Admin 0/
-*/
-
-
 ********************************************************************************
-* 1. USER PATHS
+* 1. User path
 ********************************************************************************
 
-* Root folder of the replication package
-global workdir ".../Replication Package" // insert your folder path
-global datadir ".../Replication Package/data" // insert your folder path
+global projectdir "/PATH/TO/FoodExpenditureShares/Replication Package"
 
-********************************************************************************
-* 2. BASIC CHECKS
-********************************************************************************
-
-if "${projectdir}" == "/PATH/TO/FESUpdate2025" {
-    di as error "You must first edit global projectdir in 0_master.do."
-    exit 198
+if strpos("${projectdir}", "/PATH/TO/") {
+	display as error "Edit global projectdir in 0_master.do before running the package."
+	exit 198
 }
 
+global dofiledir "${projectdir}/do"
+global datadir "${projectdir}/data"
+global auxdir "${datadir}/aux data"
+global pipdir "${auxdir}/IncomeQuintiles"
+global rankingdir "${datadir}/countrydata/popwgt_income"
+global shapedir "${datadir}/World Bank Official Boundaries - Admin 0"
+global graphdir "${projectdir}/graphs"
+global tabledir "${projectdir}/tables"
+global logdir "${projectdir}/logs"
+
+capture mkdir "${graphdir}"
+capture mkdir "${tabledir}"
+capture mkdir "${logdir}"
+
+log using "${logdir}/replication.log", text replace
+
 ********************************************************************************
-* 3. CREATE FOLDERS IF THEY DO NOT EXIST
+* 2. Required packages
 ********************************************************************************
 
-cap mkdir "${workdir}/data" // add the data into this directory
-cap mkdir "${workdir}/graphs" // output directory
-cap mkdir "${workdir}/tables" // output directory
-
-********************************************************************************
-* 4. INSTALL REQUIRED PACKAGES
-********************************************************************************
-
-* Graphics/table packages used across scripts
-cap which esttab
+capture which esttab
 if _rc ssc install estout, replace
 
-cap which coefplot
+capture which coefplot
 if _rc ssc install coefplot, replace
 
-cap which spider
-if _rc ssc install spider, replace
+capture which labmask
+if _rc ssc install labutil, replace
 
-cap which grc1leg2
-if _rc ssc install grc1leg2, replace
-
-cap which cleanplots
+capture findfile scheme-cleanplots.scheme
 if _rc ssc install cleanplots, replace
 
-* Map package and dependencies (required for 9_maps.do)
-cap which palettes
-if _rc ssc install palettes, replace
-
-cap which colrspace
-if _rc ssc install colrspace, replace
-
-cap which moremata
+capture findfile lmoremata.mlib
 if _rc ssc install moremata, replace
 
-cap which geoplot
+capture which colorpalette
+if _rc ssc install palettes, replace
+
+capture which colrspace
+if _rc ssc install colrspace, replace
+
+capture which spider
+if _rc ssc install spider, replace
+
+capture which geoplot
 if _rc ssc install geoplot, replace
 
-
 ********************************************************************************
-* 5. RUN SCRIPTS
+* 3. Analysis
 ********************************************************************************
 
-noi di as text "Running cross-sectional analyses"
-do "${workdir}/do/1_crosssection.do"
+do "${dofiledir}/1_measurement_comparability.do"
+do "${dofiledir}/2_crosssection_income_groups.do"
+do "${dofiledir}/3_crosssection_welfare.do"
+do "${dofiledir}/4_crosssection_prices.do"
+do "${dofiledir}/5_crosssection_correlations.do"
+do "${dofiledir}/6_crosssection_inequality.do"
+do "${dofiledir}/7_time_trends.do"
+do "${dofiledir}/8_imputations.do"
+do "${dofiledir}/9_imputed_results.do"
+do "${dofiledir}/10_maps.do"
 
-noi di as text "Running time trends"
-do "${workdir}/do/2_time.do"
-
-noi di as text "Running imputations"
-do "${workdir}/do/3_imputations.do"
-
-noi di as text "Running imputed data analyses"
-do "${workdir}/do/4_time_panel.do"
-
-noi di as text "Creating maps"
-do "${workdir}/do/5_maps.do"
-
+log close

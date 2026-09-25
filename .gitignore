@@ -1,20 +1,14 @@
-# macOS
+# Local system files
 .DS_Store
 **/.DS_Store
+.Rhistory
 
-# Ignore data and outputs inside Replication Package
-Replication Package/data/**
-Replication Package/graphs/**
-Replication Package/tables/**
-Replication Package/logs/**
+# Only Stata do-files are versioned inside the replication package
+Replication Package/*
+!Replication Package/do/
+!Replication Package/do/*.do
 
-# Keep placeholder files if you want the folders to stay visible
-!Replication Package/data/.gitkeep
-!Replication Package/graphs/.gitkeep
-!Replication Package/tables/.gitkeep
-!Replication Package/logs/.gitkeep
-
-# Stata temporary/output files
+# Stata temporary files
 *.log
 *.smcl
 *.gph
