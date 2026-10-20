@@ -20,6 +20,8 @@ The master file installs `estout`, `coefplot`, `labutil`, `cleanplots`, `moremat
 
 All other paths are derived from `projectdir`. The master file runs the ten analysis files in order and writes a text log to `Replication Package/logs/replication.log`.
 
+Place the analysis-ready input files in `Replication Package/data`. The income-ranking comparison reads the collated `data/FESdatabase_income.dta`; individual country files and the upstream data-preparation code are not required or included in the replication package.
+
 ## Directory structure
 
 ```text
@@ -54,16 +56,15 @@ The package creates the manuscript figures as `Figure1a`-`Figure4b` and the supp
 Additional outputs are:
 
 - `tables/TableS1.xlsx`
-- `data/FES Database.xlsx`
 - `data/FESdatabase_imputed.dta`, used by the subsequent figure script
-- `data/aux data/IncomeQuintiles/FESdatabase_quintiles_PIPwelfare_2021ppp.dta`, an intermediate matched dataset
+- `data/aux data/FESdatabase_quintiles_PIPwelfare_2021ppp.dta`, an intermediate matched dataset
 
 The map conversion files `_worldmap.dta` and `_worldmap_shp.dta` are generated automatically from the World Bank boundary shapefile stored in the local data directory. All boundary files are excluded from Git.
 
 ## Reproducibility notes
 
 - Random-number seeds used for the measurement comparison and multiple imputation are fixed in the corresponding do-files.
-- The imputation file exports only the published panel and the intermediate Stata file required for the supplementary figures; internal diagnostic datasets are not created.
+- The imputation file saves only the Stata panel required for the supplementary figures; internal diagnostic datasets are not created.
 - Output directories and generated files can be deleted safely and recreated by rerunning the master file.
 - The repository's `.gitignore` permits only `Replication Package/do/*.do` within the replication package; data and outputs remain local.
 

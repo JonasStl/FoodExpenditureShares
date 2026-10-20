@@ -2,7 +2,7 @@
 *					Continuous income data for each quintile					*
 ********************************************************************************
 
-use "${pipdir}/pip_quintile_welfare_2021ppp.dta", clear
+use "${auxdir}/pip_quintile_welfare_2021ppp.dta", clear
 
 rename country_code countrycode
 rename year pip_reporting_year
@@ -64,7 +64,19 @@ label variable pip_gap ///
     "Distance between FES survey period and PIP welfare time (years)"
 
 compress
-save "${pipdir}/FESdatabase_quintiles_PIPwelfare_2021ppp.dta", replace
+preserve
+    keep countrycode identifier Surveyyear2 Percentile FES ///
+        ln_welfare_ppp_day _pip_welfare
+    quietly ds
+    foreach variable in _dta `r(varlist)' {
+        local characteristics : char `variable'[]
+        foreach characteristic of local characteristics {
+            char `variable'[`characteristic']
+        }
+    }
+    label data ""
+    save "${auxdir}/FESdatabase_quintiles_PIPwelfare_2021ppp.dta", replace
+restore
 
 local q1_colour "215 25 28"
 local q2_colour "253 174 97"

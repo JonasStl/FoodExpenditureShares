@@ -5,38 +5,14 @@
 ********************************************************************************
 *					3.2 Income versus consumption ranking						*
 ********************************************************************************
-clear
-local flist : dir "${rankingdir}" files "*.dta"
-
-foreach f in `flist' {
-	append using "${rankingdir}/`f'"
-}
-
-ren country Country
-ren percentile  Percentile
-drop SE LB UB national_FES survey_name survey_provider percentile_generation weight_use food_definition fafh_treatment fafh_treatment_detail
-
-drop if Country == "Tonga" & Surveyyear == "2015/16"
-drop if Country == "Tonga" & Surveyyear == "2021"
-
-ren FES FES_inc
-drop ranking_variable
+use "${datadir}/FESdatabase_income.dta", clear
 
 merge 1:1 Country Surveyyear Incomegroups Percentile using "${datadir}/FESdatabase_quintiles.dta" , nogen keep(match master) keepusing(FES ranking_variable countrycode)
-
-keep if Incomegroups == "Quintiles"
 
 ren FES FES_consexp
 gen FES_diff = FES_inc - FES_consexp
 
 preserve
-
-gen surveyyear_numeric = real(substr(Surveyyear, 1, 4))
-assert !missing(surveyyear_numeric)
-bysort Country (surveyyear_numeric Surveyyear): gen keep_latest = ///
-    Surveyyear == Surveyyear[_N]
-keep if keep_latest
-drop surveyyear_numeric keep_latest
 
 egen country_id_latest = group(Country)
 tempfile FES_diff_stats_latest
@@ -56,12 +32,12 @@ forvalues q = 1/5 {
 
 postclose `FES_diff_post_latest'
 merge m:1 Percentile using `FES_diff_stats_latest', nogen
-bysort Percentile: gen plot_once_latest = _n == 1
+bysort Percentile (Country Surveyyear Incomegroups): gen plot_once_latest = _n == 1
 gen mean_diff_label_latest = string(mean_diff_latest, "%5.2f")
 
 set seed 20250826
 twoway ///
-    (scatter FES_diff Percentile, jitter(4) msymbol(Oh) msize(small) ///
+    (scatter FES_diff Percentile, jitter(4) jitterseed(20250826) msymbol(Oh) msize(small) ///
         mcolor(gs11%55) mlcolor(gs11%55)) ///
     (rcap lb_diff_latest ub_diff_latest Percentile if plot_once_latest, ///
         lcolor(blue) lwidth(medthick)) ///
@@ -88,12 +64,6 @@ restore
 preserve
 
 keep Country Surveyyear Percentile FES_inc FES_consexp countrycode
-gen surveyyear_numeric = real(substr(Surveyyear, 1, 4))
-assert !missing(surveyyear_numeric)
-bysort Country (surveyyear_numeric Surveyyear): gen keep_latest = ///
-    Surveyyear == Surveyyear[_N]
-keep if keep_latest
-drop surveyyear_numeric keep_latest
 
 reshape wide FES_inc FES_consexp, i(Country Surveyyear) j(Percentile)
 gen FES_gradient_consexp = FES_consexp1 - FES_consexp5

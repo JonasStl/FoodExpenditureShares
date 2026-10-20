@@ -24,8 +24,6 @@ if strpos("${projectdir}", "/PATH/TO/") {
 global dofiledir "${projectdir}/do"
 global datadir "${projectdir}/data"
 global auxdir "${datadir}/aux data"
-global pipdir "${auxdir}/IncomeQuintiles"
-global rankingdir "${datadir}/countrydata/popwgt_income"
 global shapedir "${datadir}/World Bank Official Boundaries - Admin 0"
 global graphdir "${projectdir}/graphs"
 global tabledir "${projectdir}/tables"

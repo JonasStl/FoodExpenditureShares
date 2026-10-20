@@ -203,6 +203,7 @@ gen double eta_FES = log(min(max(FES, 0.01), 99.99) / ///
     (100 - min(max(FES, 0.01), 99.99))) if !missing(FES)
 drop FES
 
+sort countrycode year Percentile
 mi set mlong
 mi register imputed eta_FES
 mi register regular Country countrycode countrycode_enc countryquintile_enc ///
@@ -255,6 +256,7 @@ gen double eta_FES = log(min(max(FES, 0.01), 99.99) / ///
     (100 - min(max(FES, 0.01), 99.99))) if !missing(FES)
 drop FES
 
+sort countrycode year Percentile
 mi set mlong
 mi register imputed eta_FES
 mi register regular Country countrycode countrycode_enc countryquintile_enc ///
@@ -433,7 +435,7 @@ replace FES_final_p90 = 100 * invlogit(`eta_mid' + uncertainty_factor * ///
 drop `eta_mid' `eta_lower' `eta_upper'
 
 ********************************************************************************
-* 7. Data-supported quintile-order adjustment
+* 7. Quintile-order adjustment
 ********************************************************************************
 
 tempfile order_adjustments
@@ -589,37 +591,19 @@ replace FES_final_p90 = min(FES_final_p90, 100) if !missing(FES_final_p90)
 ********************************************************************************
 
 preserve
-    keep Country countrycode year Percentile FES_final FES_final_p10 ///
-        FES_final_p90 note confidencelevel within_wave_reconstructed ///
-        within_wave_reference_year
+    keep Country countrycode year Percentile FES_final ///
+        FES_final_p10 FES_final_p90 note
     sort Country year Percentile
+    order Country countrycode year Percentile FES_final ///
+        FES_final_p10 FES_final_p90 note
+    format FES_final FES_final_p10 FES_final_p90 %10.0g
+    quietly ds
+    foreach variable in _dta `r(varlist)' {
+        local characteristics : char `variable'[]
+        foreach characteristic of local characteristics {
+            char `variable'[`characteristic']
+        }
+    }
+    label data ""
     save "${datadir}/FESdatabase_imputed.dta", replace
-
-    gen str1 confidence_category = ""
-    replace confidence_category = "A" if confidencelevel == 1
-    replace confidence_category = "B" if confidencelevel == 2
-    replace confidence_category = "C" if confidencelevel == 3
-    replace confidence_category = "D" if confidencelevel == 4
-    label var confidence_category "Confidence Category"
-    drop confidencelevel within_wave_reconstructed within_wave_reference_year
-
-    format FES_final FES_final_p10 FES_final_p90 %9.2f
-    order Country countrycode year Percentile FES_final FES_final_p10 ///
-        FES_final_p90 note confidence_category
-    export excel using "${datadir}/FES Database.xlsx", ///
-        sheet("Imputed Panel", replace) firstrow(varlabels)
-    putexcel set "${datadir}/FES Database.xlsx", ///
-        sheet("Imputed Panel") modify
-    putexcel ///
-        A1 = "Country" ///
-        B1 = "ISO3Code" ///
-        C1 = "Year" ///
-        D1 = "Percentile" ///
-        E1 = "FES" ///
-        F1 = "Lower bound" ///
-        G1 = "Upper bound" ///
-        H1 = "Note" ///
-        I1 = "Confidence Category"
-    putexcel A1:I1, bold
-    putexcel save
 restore

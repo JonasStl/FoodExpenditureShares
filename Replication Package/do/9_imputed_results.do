@@ -105,31 +105,31 @@ graph set window fontface "Helvetica"
 twoway ///
     rcap ci_lb ci_ub Percentile if incomelevel=="HIC", lcolor(blue)   || ///
     line mean_FES Percentile if incomelevel=="HIC"   , lwidth(medthick) lcolor(blue) lpattern(solid) || ///
-	scatter mean_FES Percentile if incomelevel=="HIC" & Percentile == 1, msymbol(none) mlab(lbl) mlabposition(9) mlabcolor(blue) mlabformat(%9.2f) || ///
-	scatter mean_FES Percentile if incomelevel=="HIC" & Percentile == 5, msymbol(none) mlab(lbl) mlabposition(3) mlabcolor(blue) mlabformat(%9.2f) || ///
+	scatter mean_FES Percentile if incomelevel=="HIC" & Percentile == 1, msymbol(none) mlab(lbl) mlabposition(9) mlabcolor(blue) mlabsize(6pt) mlabformat(%9.2f) || ///
+	scatter mean_FES Percentile if incomelevel=="HIC" & Percentile == 5, msymbol(none) mlab(lbl) mlabposition(3) mlabcolor(blue) mlabsize(6pt) mlabformat(%9.2f) || ///
     rcap ci_lb ci_ub Percentile if incomelevel=="LIC", lcolor(green)   || ///
     line mean_FES Percentile if incomelevel=="LIC"   , lwidth(medthick) lcolor(green) lpattern(solid)  || ///
-	scatter mean_FES Percentile if incomelevel=="LIC" & Percentile == 1, msymbol(none) mlab(lbl) mlabposition(9) mlabcolor(green) mlabformat(%9.2f) || ///
-	scatter mean_FES Percentile if incomelevel=="LIC" & Percentile == 5, msymbol(none) mlab(lbl) mlabposition(3) mlabcolor(green) mlabformat(%9.2f) || ///
+	scatter mean_FES Percentile if incomelevel=="LIC" & Percentile == 1, msymbol(none) mlab(lbl) mlabposition(9) mlabcolor(green) mlabsize(6pt) mlabformat(%9.2f) || ///
+	scatter mean_FES Percentile if incomelevel=="LIC" & Percentile == 5, msymbol(none) mlab(lbl) mlabposition(3) mlabcolor(green) mlabsize(6pt) mlabformat(%9.2f) || ///
     rcap ci_lb ci_ub Percentile if incomelevel=="LMC", lcolor(sienna)   || ///
     line mean_FES Percentile if incomelevel=="LMC"   , lwidth(medthick) lcolor(sienna) lpattern(solid)  || ///
-	scatter mean_FES Percentile if incomelevel=="LMC" & Percentile == 1, msymbol(none) mlab(lbl) mlabposition(9) mlabcolor(sienna) mlabformat(%9.2f) || ///
-	scatter mean_FES Percentile if incomelevel=="LMC" & Percentile == 5, msymbol(none) mlab(lbl) mlabposition(3) mlabcolor(sienna) mlabformat(%9.2f) || ///
+	scatter mean_FES Percentile if incomelevel=="LMC" & Percentile == 1, msymbol(none) mlab(lbl) mlabposition(9) mlabcolor(sienna) mlabsize(6pt) mlabformat(%9.2f) || ///
+	scatter mean_FES Percentile if incomelevel=="LMC" & Percentile == 5, msymbol(none) mlab(lbl) mlabposition(3) mlabcolor(sienna) mlabsize(6pt) mlabformat(%9.2f) || ///
     rcap ci_lb ci_ub Percentile if incomelevel=="UMC", lcolor(cranberry)   || ///
     line mean_FES Percentile if incomelevel=="UMC"   , lwidth(medthick) lcolor(cranberry) lpattern(solid)  || ///
-	scatter mean_FES Percentile if incomelevel=="UMC" & Percentile == 1, msymbol(none) mlab(lbl) mlabposition(8) mlabcolor(cranberry) mlabformat(%9.2f) || ///
-	scatter mean_FES Percentile if incomelevel=="UMC" & Percentile == 5, msymbol(none) mlab(lbl) mlabposition(4) mlabcolor(cranberry) mlabformat(%9.2f) || ///
+	scatter mean_FES Percentile if incomelevel=="UMC" & Percentile == 1, msymbol(none) mlab(lbl) mlabposition(8) mlabcolor(cranberry) mlabsize(6pt) mlabformat(%9.2f) || ///
+	scatter mean_FES Percentile if incomelevel=="UMC" & Percentile == 5, msymbol(none) mlab(lbl) mlabposition(4) mlabcolor(cranberry) mlabsize(6pt) mlabformat(%9.2f) || ///
     rcap ci_lb ci_ub Percentile if incomelevel=="World", lcolor(black) || ///
     line mean_FES Percentile if incomelevel=="World" , lwidth(medthick) lcolor(black) lpattern(dash) || ///
-	scatter mean_FES Percentile if incomelevel=="World" & Percentile == 1, msymbol(none) mlab(lbl) mlabposition(10) mlabcolor(black) mlabformat(%9.2f) || ///
-	scatter mean_FES Percentile if incomelevel=="World" & Percentile == 5, msymbol(none) mlab(lbl) mlabposition(3) mlabcolor(black) mlabformat(%9.2f) || ///
+	scatter mean_FES Percentile if incomelevel=="World" & Percentile == 1, msymbol(none) mlab(lbl) mlabposition(10) mlabcolor(black) mlabsize(6pt) mlabformat(%9.2f) || ///
+	scatter mean_FES Percentile if incomelevel=="World" & Percentile == 5, msymbol(none) mlab(lbl) mlabposition(3) mlabcolor(black) mlabsize(6pt) mlabformat(%9.2f) || ///
     , ///
-    xtitle("Welfare quintile", size(5pt)) ///
-    ytitle("Mean FES", size(5pt)) ///
-    xlabel(1(1)5) xscale(range(0.6 5)) ///
+    xtitle("Welfare quintile", size(7pt)) ///
+    ytitle("Mean FES", size(7pt)) ///
+    xlabel(1(1)5) xscale(range(0.4 5)) ///
 	ylabel(0(10)70) ///
-    legend(size(7pt) rows(1) position(6) order(2 "HIC"  14 "UMICs" 10 "LMIC" 6 "LIC"  18 "World")) ///
-	graphregion(margin(r+6)) scheme(cleanplots) xsize(8.8cm) ysize(5cm) name(g1, replace)
+    legend(size(7pt) rows(1) position(6) order(2 "HIC"  14 "UMIC" 10 "LMIC" 6 "LIC"  18 "World")) ///
+	graphregion(margin(r+8)) scheme(cleanplots) xsize(8cm) ysize(6cm) name(g1, replace)
 
 graph export "${graphdir}/FigureS11.png", replace
 graph export "${graphdir}/FigureS11.pdf", replace
