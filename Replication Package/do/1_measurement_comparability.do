@@ -90,8 +90,8 @@ twoway ///
     xscale(range(`axis_min_latest' `axis_max_latest')) ///
     yscale(range(`axis_min_latest' `axis_max_latest')) ///
     aspectratio(1) ///
-    xtitle("FES gradient (Q1 - Q5)" "Consumption ranking", size(9pt)) ///
-    ytitle("FES gradient (Q1 - Q5)" "Income ranking", size(9pt)) ///
+    xtitle("FES gradient (Q1 - Q5)" "Consumption ranking", size(8pt)) ///
+    ytitle("FES gradient (Q1 - Q5)" "Income ranking", size(8pt)) ///
     legend(order(1 "Equal gradient" 2 "Country") rows(2) ///
         size(8pt) ring(0) position(11)) ///
     graphregion(color(white)) plotregion(color(white) margin(zero)) ///
